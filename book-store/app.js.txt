@@ -1,0 +1,90 @@
+let categories = [];
+let books = [];
+
+// دالة إضافة قسم
+function addCategory() {
+    const name = document.getElementById('categoryName').value;
+    const color = document.getElementById('categoryColor').value;
+    if (name) {
+        categories.push({ name, color });
+        saveData();
+        updateCategorySelect();
+        renderExistingData();
+        document.getElementById('categoryName').value = '';
+    }
+}
+
+// دالة إضافة كتاب
+function addBook() {
+    const title = document.getElementById('bookTitle').value;
+    const price = document.getElementById('bookPrice').value;
+    const category = document.getElementById('bookCategory').value;
+    const imageFile = document.getElementById('bookImage').files[0];
+
+    if (title && price && category && imageFile) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            books.push({
+                id: Date.now().toString(),
+                title,
+                price,
+                category,
+                image: e.target.result
+            });
+            saveData();
+            renderExistingData();
+            document.getElementById('bookTitle').value = '';
+            document.getElementById('bookPrice').value = '';
+            document.getElementById('bookImage').value = '';
+        };
+        reader.readAsDataURL(imageFile);
+    }
+}
+
+// دالة حفظ البيانات
+function saveData() {
+    localStorage.setItem('categories', JSON.stringify(categories));
+    localStorage.setItem('books', JSON.stringify(books));
+}
+
+// دالة تحميل البيانات
+function loadData() {
+    categories = JSON.parse(localStorage.getItem('categories')) || [];
+    books = JSON.parse(localStorage.getItem('books')) || [];
+    updateCategorySelect();
+    renderExistingData();
+}
+
+// دالة عرض البيانات الحالية
+function renderExistingData() {
+    document.getElementById('categoriesList').innerHTML = categories.map(cat => `
+        <div class="item-card">
+            <div>
+                <strong style="color: ${cat.color}">${cat.name}</strong>
+                <span>(${books.filter(b => b.category === cat.name).length} كتاب)</span>
+            </div>
+            <div class="actions">
+                <button class="edit-btn" onclick="editCategory('${cat.name}')">تعديل</button>
+                <button class="delete-btn" onclick="deleteCategory('${cat.name}')">حذف</button>
+            </div>
+        </div>
+    `).join('');
+
+    document.getElementById('booksList').innerHTML = books.map(book => `
+        <div class="item-card">
+            <div style="flex-grow: 1;">
+                <h4>${book.title}</h4>
+                <p>السعر: ${book.price} ريال - القسم: ${book.category}</p>
+            </div>
+            <div class="actions">
+                <button class="edit-btn" onclick="editBook('${book.id}')">تعديل</button>
+                <button class="delete-btn" onclick="deleteBook('${book.id}')">حذف</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+// التحميل الأولي
+window.onload = function() {
+    loadData();
+};

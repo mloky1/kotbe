@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم - إدارة الكتب</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="admin-panel">
+        <h1>لوحة إدارة الكتب</h1>
+        
+        <!-- إضافة الأقسام -->
+        <div class="form-group">
+            <h3>إضافة قسم جديد</h3>
+            <input type="text" id="categoryName" placeholder="اسم القسم">
+            <input type="color" id="categoryColor">
+            <button onclick="addCategory()">إضافة قسم</button>
+        </div>
+
+        <!-- إضافة الكتب -->
+        <div class="form-group">
+            <h3>إضافة كتاب جديد</h3>
+            <input type="text" id="bookTitle" placeholder="عنوان الكتاب">
+            <input type="number" id="bookPrice" placeholder="السعر">
+            <select id="bookCategory"></select>
+            <input type="file" id="bookImage" accept="image/*">
+            <button onclick="addBook()">إضافة كتاب</button>
+        </div>
+
+        <!-- عرض البيانات الحالية -->
+        <div class="existing-data">
+            <h2>الأقسام الحالية</h2>
+            <div id="categoriesList"></div>
+            <h2>الكتب المضافة</h2>
+            <div id="booksList"></div>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
